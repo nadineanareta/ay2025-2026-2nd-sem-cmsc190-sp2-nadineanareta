@@ -1,0 +1,218 @@
+@keyframes zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.zoom-in {
+    animation: appear 1s linear;
+}
+
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.fade-in {
+  animation: fade-in 2s ease-in-out;
+
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-2.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-in-down {
+  animation: fade-in-down 2s ease-in-out;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.slide-up {
+  animation: slide-up 2s ease-in;
+  animation-timeline: view();
+  animation-range: entry 0% cover 50%;  
+}
+
+
+@keyframes scroll-down {
+  from {
+    transform: translateY(-50%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    color: white;
+  }
+}
+.scroll-down {
+  animation: scroll-down 2s infinite;
+  animation-delay: 2s;
+}
+
+
+@keyframes teaser-cards {
+    from {
+      transform: translateY(40%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  .teaser-cards {
+    animation: teaser-cards 2s ease-in;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;  
+  }
+
+  .card {
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .card-image {
+    transition: transform 0.5s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .card:hover .card-image {
+    transform: scale(1.08);
+    z-index: 2;
+  }
+
+  @keyframes gradientMove {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+.animated-gradient-bg {
+    background: linear-gradient(135deg, #e0f2e9, #a8e063, #56ab2f, #005206, #e0f2e9);
+    background-size: 400% 400%;
+    animation: gradientMove 12s ease-in-out infinite;
+  }
+  
+
+
+@keyframes heatmap-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+    
+}
+.heatmap-fade-in {
+  animation: heatmap-fade-in 1s ease-in-out;
+    animation-timeline: view();
+    animation-range: entry 0% cover 50%;
+}
+
+.bubbles-bg {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #F1EEC5, #649C3E);
+  }
+  
+  .bubble {
+    position: absolute;
+    bottom: -100px;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: bubbleUp 12s linear infinite;
+  }
+  
+  .bubble1 {
+    left: 10%;
+    width: 60px;
+    height: 60px;
+    background: #FFFFFF40;
+    animation-duration: 10s;
+    animation-delay: 0s;
+  }
+  .bubble2 {
+    left: 30%;
+    width: 40px;
+    height: 40px;
+    background: #FFFFFF40;
+    animation-duration: 12s;
+    animation-delay: 2s;
+  }
+  .bubble3 {
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    background: #FFFFFF40;
+    animation-duration: 14s;
+    animation-delay: 4s;
+  }
+  .bubble4 {
+    left: 70%;
+    width: 50px;
+    height: 50px;
+    background: #FFFFFF40;
+    animation-duration: 11s;
+    animation-delay: 1s;
+  }
+  .bubble5 {
+    left: 85%;
+    width: 30px;
+    height: 30px;
+    background: #FFFFFF40;
+    animation-duration: 13s;
+    animation-delay: 3s;
+  }
+  
+  @keyframes bubbleUp {
+    0% {
+      bottom: -100px;
+      opacity: 0.5;
+      transform: translateX(0) scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: translateX(20px) scale(1.1);
+    }
+    100% {
+      bottom: 110%;
+      opacity: 0;
+      transform: translateX(-20px) scale(1.2);
+    }
+  }

@@ -1,1 +1,8 @@
-# ay2025-2026-2nd-sem-cmsc190-sp2-nadineanareta
+# AI Model Zoo Module for SPIDHIVE
+Authors: Nadine Arabel A. Anareta and Val Randolf M. Madrid
+
+The effective monitoring of crop pests and diseases is critical for agricultural sustainability in the Philippines. While applications like SPIDTECH+ facilitate remote diagnostics, the underlying infrastructure previously lacked a centralized mechanism for managing the iterative development of the machine learning models themselves. This study developed an AI Model Zoo integrated within the SPIDHIVE platform to streamline the storage, management, and deployment of agricultural AI models. A robust, bidirectional cross-platform architecture was engineered utilizing Supabase as a dedicated mobile backend. This integration enables the efficient downstream, over-the-air delivery of compiled `.tflite` models to the SPIDTECH+ client, while simultaneously facilitating the upstream mirroring of images for expert review. The web platform further optimizes developer workflows through automated artifact parsing, robust dataset tracking, and automated configuration generation to prevent class confusion during model retraining. System evaluation by AI Developers yielded an "Excellent" System Usability Scale (SUS) score of 88.0, confirming high functional efficiency and minimal cognitive load. Ultimately, this localized repository establishes a continuous improvement pipeline for agricultural AI, providing researchers with the necessary infrastructure to accelerate the deployment of accurate diagnostic tools for crop protection.
+
+Keywords: SPIDTECH+, SPIDHIVE, AI Model Repository, Cross-Platform Synchronization, Pest and Disease Identification
+
+Read [SETUP.md](SETUP.md) for development setup instructions and [CHANGELOG.md](CHANGELOG.md) for the history of enrollment.
