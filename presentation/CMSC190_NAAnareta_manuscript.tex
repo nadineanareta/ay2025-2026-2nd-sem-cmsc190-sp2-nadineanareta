@@ -1,0 +1,497 @@
+%Sample for icsthesis.cls
+%Author: NAAnareta
+%Reminders: Omit \lipsum commands
+
+\documentclass{icsthesis}     
+\usepackage{natbib,graphicx,booktabs, hyperref, array, float, placeins, microtype}
+\renewcommand{\TITLE}{AI MODEL ZOO MODULE FOR SPIDHIVE}
+\renewcommand{\AUTHOR}{NADINE ARABEL A. ANARETA}
+\renewcommand{\DEGREE}{BACHELOR OF SCIENCE}
+\renewcommand{\MAJOR}{Computer Science}
+\renewcommand{\MONTH}{June}
+\renewcommand{\YEAR}{2026}
+
+\begin{document}
+	
+	\begin{frontmatter}
+		%create title
+		\maketitle
+				
+		\begin{approvalpage}
+			The thesis hereto attached entitled \TITLE , prepared and submitted by \AUTHOR , in partial fulfillment of the requirements for the degree of \DEGREE\ (\MAJOR) is hereby accepted.
+			
+			\begin{multicols}{2}
+				\centering
+				\addsignature{ARIEL B. DORIA}{Member, Guidance Committee} %custom command for adding signature field
+				\columnbreak
+				\addsignature{RIZZA DC. MERCADO}{Member, Guidance Committee}
+			\end{multicols}
+			\addsignature{VAL RANDOLF M. MADRID}{Chair, Guidance Committee}
+			
+			Accepted in partial fulfillment of the requirements for the degree of \DEGREE\ (\MAJOR). 
+			\addsignature{RACHEL EDITA O. ROXAS, PhD}{Director, Institute of Computer Science}
+			\addsignature{CHRYSLINE MARGUS N. PI\~{N}OL, PhD}{Dean, College of Arts and Sciences\\University of the Los Ba\~{n}os}
+		\end{approvalpage}
+		
+		\begin{biosketch}
+			
+			Nadine Arabel A. Anareta was born on June 07, 2004 in Nagcarlan, Laguna. In September 2022, she entered the University of the Philippines Los Baños (UPLB) to pursue a Bachelor of Science in Computer Science.
+
+            During her undergraduate studies at the Institute of Computer Science, Nadine cultivated a strong technical foundation in full-stack web development, database management, and system architecture. She developed a particular interest in building modular software and integrating modern backend services with frontend frameworks. Her academic journey culminated in her Special Problem, where she successfully engineered a centralized AI Model Zoo for the SPIDHIVE platform, aiming to bridge the gap between machine learning development and practical, edge-based agricultural diagnostics.
+            
+            Outside of her rigorous academic requirements, Nadine was a dedicated member of the UP Ana Kalang Society for four years. Deeply committed to giving back to her roots, she served as an officer for three years within this varsitarian organization, leading and participating in various initiatives designed to serve and uplift her home community of Nagcarlan.
+            
+            After earning her degree, Nadine aspires to pursue a career as a software engineer and full-stack developer. She aims to continue architecting robust, scalable systems and developing technological solutions that create a tangible, positive impact on society.	
+			
+			\addauthorsignaturefield
+		\end{biosketch}	
+		
+		%acknowledgement
+		\begin{acknowledgement}
+			The author would like to express her deepest and most sincere gratitude to the following individuals and institutions whose support, guidance, and expertise made the completion of this Special Problem possible:
+
+            To her esteemed adviser, Prof. Val Randolf M. Madrid, for his unwavering patience, expert mentorship, and constructive feedback. His brilliant insights into system modularity and software architecture were instrumental in shaping the SPIDHIVE AI Model Zoo and refining this manuscript.
+            
+            To the members of her Guidance Committee, for their meticulous review of this study. Their challenging questions and highly technical recommendations significantly elevated the quality, security, and usability of the final system.
+            
+            To the National Crop Protection Center (NCPC) and the Project SARAi – SPIDTECH team, for generously providing the essential agricultural datasets, annotations, and domain expertise that served as the very foundation of this repository.
+            
+            To the expert AI Developers who generously volunteered their time to participate in the usability testing, whose invaluable feedback directly improved the platform's workflows and fault tolerance.
+            
+            To her friends, classmates, and fellow Computer Science students at UPLB, for the shared struggles, late-night debugging sessions, and the constant encouragement that made the rigorous academic journey memorable.
+            
+            To her family, for their endless love, moral support, and financial provision throughout her entire college life. Their belief in her capabilities served as her primary source of motivation. This milestone is dedicated to them.
+            
+            Above all, to the Almighty God, for the strength, resilience, and wisdom to overcome every challenge and see this endeavor through to its successful completion.
+		\end{acknowledgement}
+		
+		%TOC
+		\maketableofcontents
+		
+		%LOT
+		\makelistoftables
+
+		%LOF
+		\makelistoffigures
+	
+		%ABSTRACT
+		
+		\begin{abstractwithpageno}	
+		\\
+		\textbf{\AUTHOR}, University of the Philippines Los Ba\~{n}os, \MONTH\ \YEAR. \textbf{\TITLE}
+		\\SP Adviser: PROF. VAL RANDOLF M. MADRID\\
+			
+		The effective monitoring of crop pests and diseases is critical for agricultural sustainability in the Philippines. While applications like SPIDTECH+ facilitate remote diagnostics, the underlying infrastructure previously lacked a centralized mechanism for managing the iterative development of the machine learning models themselves. This study developed an AI Model Zoo integrated within the SPIDHIVE platform to streamline the storage, management, and deployment of agricultural AI models. A robust, bidirectional cross-platform architecture was engineered utilizing Supabase as a dedicated mobile backend. This integration enables the efficient downstream, over-the-air delivery of compiled \texttt{.tflite} models to the SPIDTECH+ client, while simultaneously facilitating the upstream mirroring of images for expert review. The web platform further optimizes developer workflows through automated artifact parsing, robust dataset tracking, and automated configuration generation to prevent class confusion during model retraining. System evaluation by AI Developers yielded an "Excellent" System Usability Scale (SUS) score of 88.0, confirming high functional efficiency and minimal cognitive load. Ultimately, this localized repository establishes a continuous improvement pipeline for agricultural AI, providing researchers with the necessary infrastructure to accelerate the deployment of accurate diagnostic tools for crop protection.
+		\end{abstractwithpageno}
+
+	\end{frontmatter}
+	
+	%BODY OF THESIS HERE (Use up to 3 levels only, (sec -> subsec -> subsubsec)
+	\begin{mainmatter}
+		\section{INTRODUCTION}
+			\subsection{Background of the Study}
+            The Philippines is primarily considered an agricultural country, accounting for 7.5\% of the total GDP during the second quarter of 2025 \cite{authentication2-no-date}. Crop production in the Philippines during the third quarter of 2025 increased by 11.3\% compared to the production in the same quarter last year. They contributed approximately 56\% of the total value of agriculture and fisheries in the Philippines, specifically during a period of recorded expansion in production \cite{psa-2025}. The agriculture sector provides livelihood and employment to most of the population, dominating the economic growth of the Philippines \cite{dogello-2021}. Among the most produced crop commodities are rice or palay, corn, and cassava \cite{Balendres_2023}. In 2025, the expansion of production was led by sugarcane, which grew by 341\%, followed by corn and palay with increments of 29.8\% and 13.9\%, respectively \cite{authentication2-no-date}. The total amount the Philippines exported in June 2025 was \$7.02 billion, ranking the country 43rd in terms of total exports \cite{philippines-exports}.
+
+            Problems and challenges in the agriculture sector are inevitable. Poor crop production has been a long-standing problem, primarily due to typhoons, limited adoption of high-yielding varieties, crop diseases, and pest infestations \cite{Brown_2020}. But problems caused by biotic factors, such as pests and disease, can have a long-term impact \cite{Balendres_2023}. Rice, one of the commonly affected crops in the Philippines by guilds of pests such as defoliators, stemborers, and leaffolders, causes yield loss in production, financial, and economic aspects \cite{Litsinger_Bandong_Canapi_2011}. Most of the rice field stations near Lake Mainit, Philippines, had an abundance of gastropod species, with \textit{Melanoides maculata} as the most abundant (32\%) \cite{jumawan-2025}. High yield loss in corn production with 27\% is caused by asian corn borers, armyworm, common cutworm, and corn earworm \cite{Afidchao_Musters_De}. The effort in pest control and other preventive measures, including the use of pesticides, is effective in reducing yield losses and improving crop quality \cite{damalas-2011}.
+
+            However, early detection of pests and crop diseases by identification and remote monitoring could be one way to alleviate problems in crop protection. Farmers, or non-experts, can help identify pests and diseases by gathering data to be assessed by experts. The citizen-science approach encourages involvement and cooperative partnership of non-experts and experts in providing models and accurate spatial distribution \cite{Sullivan_Aycrigg_Barry_Bonney_Bruns_Cooper_Damoulas_Dhondt_Dietterich_Farnsworth_etal._2013}. Using modern technologies, farmers or non-experts can early identify and detect pests and diseases in their crops \cite{mique-2018}. Reducing risks and taking preventive measures by using predictive models for possible crop diseases and pest infestations enhances farming techniques \cite{Mastul_Awae_Bara_Yaro_2023}.
+
+            A local initiative called Smarter Approaches to Reinvigorate Agriculture in the Philippines (Project SARAi) provides real-time monitoring for crops, including pests and diseases, which includes the Smarter Pest and Disease Identification Technology (SPIDTECH) app \cite{dvi-databank}. SPIDTECH is a mobile application that provides real-time monitoring of pests and diseases in crops \cite{Guiam_Gutierrez_Gapasin_Matalog_Ebuenga_2021}. A web application that provides a real-time mapping and reporting tool, and acts as a repository for AI models that help identify crops and pests. However, this companion application has no crowd sourcing, which led to the development of SPIDTECH+. SPIDTECH+ is an enhanced version of SPIDTECH that employs a citizen science approach, involving non-experts in solving crop disease and pest infestation problems \cite{belleza-2025}.
+            
+			\subsection{Statement of the Problem}
+            The current web application, SPIDHIVE, serves as a repository for image datasets of crops, pests, and diseases, but lacks key features to support the storage, management, and sharing of AI models. To streamline the management of existing and the development of new AI models, there is a need to develop an AI model zoo within SPIDHIVE for use in SPIDTECH+. This platform will enable users to upload and download AI models, thereby accelerating access to resources and facilitating collaboration among researchers and practitioners, specifically from the National Crop Protection Center (NCPC).
+            
+            \subsection{Objectives of the Study}
+            The study aims to enhance SPIDHIVE by developing a localized AI model zoo that enables efficient storage, management, and deployment of AI models for real-time pest and disease identification. Specifically, it seeks to:
+            
+            \begin{enumerate}
+                \item Develop an AI model zoo module that enables storage, management, and sharing of AI models for pest and disease identification within SPIDHIVE.
+                \item Implement APIs to streamline access to AI models, ensuring seamless integration with SPIDHIVE
+                \item Integrate the AI model module zoo into the SPIDHIVE web application, ensuring seamless access and sharing of AI models.
+                \item Evaluate the web application in terms of functionality, usability, and performance.
+            \end{enumerate}
+            
+            \subsection{Significance of the Study}
+            The study provides a centralized and accessible AI model zoo within SPIDHIVE, allowing faster development and sharing of models for pest and disease identification. This supports innovation, reduces duplication of work, and empowers agricultural stakeholders with timely diagnostic tools. Furthermore, the study will serve as a reference for future developers and researchers in the enhancement, expansion, and advancement of agricultural monitoring systems. 
+            
+            \subsection{Scope and Limitation}
+            The study is limited to the design and development of the AI model zoo module of SPIDHIVE. The datasets used in training and testing the models is limited to the information provided by the National Crop Protection Center (NCPC). 
+
+		\section{REVIEW OF RELATED LITERATURE}
+            \subsection{Crop Diseases and Pest Monitoring}
+            Agricultural losses continue to pose a threat to food security \cite{omaye-2024}, livelihoods, and overall social well-being \cite{lu-2025}, as well as economic hardships for farmers \cite{hassan-2021}. The threat of crop diseases and pests to global agriculture is severe \cite{zhang-2019}, with estimates that up to 50\% of economically important crop losses are caused by both biotic and abiotic stresses, including pest infestations and plant diseases \cite{junaid-2024}.
+
+            According to the Climate Change Commission \cite{climate-change-commission-2017}, the agricultural sector has long been a crucial component of the Philippines' economy, contributing significantly to the country's GDP. However, in 2024 alone, the Philippines experienced agricultural losses due to natural disasters, including floods, droughts, pests, and diseases \cite{international-rice-research-institute-2025}. Staple crops such as rice and corn remain highly vulnerable, making timely detection and monitoring crucial to avoiding severe disruptions in food supply and financial stability.
+
+            Effective monitoring helps prevent widespread crop damage, yet conventional approaches remain limited. Observation through the naked eye, manual monitoring, or traditional human-based methods for symptoms of diseases are inefficient due to workload, fatigue, and human error \cite{kolesnikova-2023}. It requires expertise and regular monitoring \cite{lu-2017, hassan-2021}, which could be manually tiring \cite{ritharson-2023}, tedious, time-consuming, and expensive, leading to misjudgments and misuse of pesticides, resulting in economic losses and environmental damage \cite{zheng-2025}.
+
+            Miranda et al. \cite{miranda-2014} employed image processing techniques to detect pest infestations in rice paddy fields. The implementation of image processing techniques, through the development of an automated detection system, made the monitoring process easier compared to traditional pest management methods. The results of this study were promising, but further improvement is possible with the application of other image processing techniques to enhance efficiency and accuracy.
+
+            While Bengochea-Guevara et al. \cite{Bengochea-Guevara_Montes_Andújar_Barra_Conejero_Ribeiro_2025} implemented a complete drive-by-wire system using a commercial electric vehicle to create a fully autonomous agricultural inspection platform. This provided significant advantages in terms of energy autonomy, endurance, and robustness.
+
+            In the Philippines, Medalla \cite{Medalla_2018} introduced the application of the Wavelet Technique in Image Fusion and Reconstruction as an early detection method in reducing pests in the Philippines' agricultural sector. It integrated several low-quality captured images that boosted the quality and visibility of the data from a slow, low-cost, and fast-phasing camera. Farming efficiency, health monitoring accuracy of crops, and harvest productivity increased because of the design algorithm for Image Fusion.
+
+            These studies emphasize the importance of early detection and reliable monitoring of crop disease and pests in mitigating agricultural losses. Some automated and digital monitoring systems have emerged, which are still limited to accuracy, scalability, and accessibility for farmers. This emphasizes the need for a detection method that supports timely decision-making.
+
+            \subsection{Artificial Intelligence Model for Crop Disease and Pest Identification}
+            Artificial intelligence has emerged as a promising solution for improving crop disease and pest identification and monitoring, ensuring a faster and more reliable system. AI models detect patterns from large datasets and apply these learned representations to make accurate predictions \cite{ibm-2025}. Deep learning techniques, such as Convolutional Neural Networks (CNNs), have demonstrated remarkable performance in extracting and recognizing visual features from crop images, even in complex field environments \cite{zhang-2024, lu-2025, raouhi-2022, mique-2018}. This has motivated researchers to develop and apply advanced AI architectures specifically tailored for the recognition of agricultural diseases and pests.
+
+            Zhang et al. \cite{zhang-2024} used the advancement of CNN in identifying cassava diseases by leveraging salient semantic features and promising high returns. Meanwhile, models such as YOLO, Faster R-CNN, and SSD were used by Raouhi et al. \cite{raouhi-2022} in identifying pests that achieved a significant accuracy. These studies show that AI models, particularly CNNs and object detection frameworks, can achieve high accuracy in identifying crop diseases and pests, making them promising tools for automated monitoring.
+
+            Lu et al. \cite{lu-2025} further enhanced the CNN for crop disease and pest identification, specifically on maize disease and Pentatomidae stinkbug pest. In this study, a reinforcement learning-based dual-mode grey wolf optimizer (RLDMGWO) was introduced with CNN, while enhancing the CNN model accuracy significantly on both datasets.
+
+            Similarly, Bijlwan et al. \cite{bijlwan-2025} used deep learning models to evaluate their efficiency and accuracy on detecting, classifying, and assessing diseases and pests on rice crops. EfficientNetB0, EfficientNetB7, and ResNet50 obtained the highest accuracy and precision, although the study emphasized the need for high-quality, diverse images to support model generalization in practical farm environments.
+
+            In the Philippines, Mique Jr. and Palaoag \cite{mique-2018} successfully developed a CNN-based rice pest and disease detector using a dataset from the Regional Crop Protection Center, achieving 90.9\% accuracy. The authors recommend further mobile deployment to provide farmers with accessible diagnostic tools. A mobile application called SPIDTECH was also deployed for digital identification and remote monitoring of crop diseases and pests using a MobileNetV2 architecture \cite{Guiam_Gutierrez_Gapasin_Matalog_Ebuenga_2021}.
+
+            While AI-based detection systems show strong performance across different crops and pest species, most models are developed independently and deployed as isolated applications. This creates a challenge in contexts where multiple models must be managed, updated, and integrated into a unified decision-support system.
+
+            \subsection{Web and Mobile Applications for Crop Disease and Pest Monitoring}
+            With the existing monitoring applications, an accessible, fast, and advanced method using an affordable and AI-powered web and mobile application \cite{magnaye-2025, Guiam_Gutierrez_Gapasin_Matalog_Ebuenga_2021}. In the Philippines, applications such as SPIDTECH \cite{Guiam_Gutierrez_Gapasin_Matalog_Ebuenga_2021}, SPIDTECH+ \cite{belleza-2025}, and eDamuhan \cite{tallada-2020} had already been developed as mobile-based systems for pest and disease detection. Similarly, CROPDEX or SPIDHIVE \cite{masicat-2025} and SaBaTech \cite{magnaye-2025} are also some of the available web applications for crop disease and pest monitoring.
+
+            The Philippine Rice Research Institute (PhilRice) has also introduced mobile tools such as AGRIDOC, eDamuhan, Binhing Palay, and MOET-App related to rice production. Among these, eDamuhan is the only mobile application that allows quick identification of weeds or pest and their consequent management. A photo will be sent to the central server to identify the pest using artificial intelligence-based TensorFlow \cite{tallada-2020}. On the other hand, SaBaTech is a web application for real-time detection of diseases and pests on bananas through image recognition using AI technology, alerting the farmers in real-time using SMS \cite{magnaye-2025}.
+
+            SPIDTECH, developed under the Smarter Approaches to Reinvigorate Agriculture as an Industry (SARAi) project, was trained on locally collected datasets of pests and diseases of rice, corn, coffee, cacao, banana, sugarcane, tomato, and soybean. It used a pretrained neural network, MobileNetV2, which was ideal for mobile devices. Two models were used each for pest and disease identification in this study, instead of having separate models for each list of pests and diseases per crop. The application can function offline, increasing accessibility for farmers in remote areas. With the help of crop protection experts, a library containing information about crop diseases and pests has been deployed \cite{Guiam_Gutierrez_Gapasin_Matalog_Ebuenga_2021}.
+
+            Building upon SPIDTECH, SPIDTECH+ \cite{belleza-2025} expanded its coverage from six to twenty crops, such as mango, abaca, rubber, papaya, and ampalaya. This study also adopted a citizen science approach where non-experts, such as farmers, were allowed to upload images, which were later annotated by experts. This filled the major barrier of the limited availability of large, diverse, and annotated datasets \cite{raouhi-2022}.
+
+            Both SPIDTECH and SPIDTECH+ are integrated with SPIDHIVE (CROPDEX), the centralized web platform that stores, visualizes, and manages pest and disease data. SPIDHIVE serves as the command and data center for the mobile applications: images uploaded from SPIDTECH are reflected in SPIDHIVE, where experts review and annotate them before they are used to retrain and improve AI models. The updated models are then deployed back into SPIDTECH+, ensuring a continuous improvement cycle between field data collection and AI model refinement \cite{masicat-2025, belleza-2025, Guiam_Gutierrez_Gapasin_Matalog_Ebuenga_2021}.
+
+            These systems demonstrate the growing usage of artificial intelligence in agricultural monitoring procedures, utilizing end-to-end data collection, model training, and information dissemination. Despite having advanced artificial intelligence models across different platforms for different crops, there is a need for a centralized, organized, and single AI model management system that can store, organize, and deploy models for varied crops.
+
+            \subsection{Model Repositories and AI Model Zoo} 
+            AI model repositories are a well-curated collection of pre-trained models that developers can integrate into their applications without building from scratch \cite{India_2025}. Global platforms such as GitHub, Hugging Face Hub, TensorFlow Hub, and PyTorch Hub allow researchers to host pre-trained models with documentation, version histories, and standardized formats that support model reuse and reproducibility. However, because they are designed for broad and varied domains, they do not always meet the specialized requirements of agricultural applications, particularly those involving localized datasets, crop conditions, and field-use constraints.
+
+            Although many AI model repositories exist, they remain limited in addressing the specific needs of SPIDHIVE and its user base. SPIDHIVE already hosts agricultural datasets and supports users involved in pest and disease monitoring, yet it lacks a mechanism for directly integrating AI model management into its existing workflow. An internal AI model zoo would enable users to upload, download, update, and manage models that are directly aligned with the data already curated within the system. This localized repository prevents duplication of work, supports continuous improvement of existing models, and improves usability by keeping the entire pipeline within a single platform. Ultimately, establishing an internal AI model zoo strengthens SPIDHIVE’s role as a unified agricultural intelligence system, enabling more accurate diagnostics and contributing to more effective crop protection strategies in the Philippines.
+
+        \section{METHODOLOGY}
+            \subsection{Sampling and Data Collection}
+            The image datasets used for training and evaluating AI models were exclusively provided by the National Crop Protection Center (NCPC). As of May 2026, the centralized repository contains a total of 5,690 valid images and 23,639 expert-verified bounding box annotations spanning multiple crops. Shown in Figure 1 is a sample dataset of a corn that was uploaded, annotated, and reviewed by NCPC.
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{Dataset.png}
+                \caption{Sample Corn Dataset}
+                \label{fig:placeholder}
+            \end{figure}
+            
+            \subsection{System Architecture and Design}
+            The AI Model Zoo module leverages the existing SPIDHIVE framework to ensure seamless integration with current operations. The architecture follows a three-tier design pattern: 
+            
+            \subsubsection{Frontend Layer}
+            The client-side interface utilizes ReactJS with Vite to build a highly responsive, web-based management interface. The module incorporates modern user interface libraries, including Tailwind CSS, Lucide React, and Framer Motion for an intuitive user experience. The interface is designed to maintain consistency with existing SPIDHIVE components, utilizing a shared design system for data visualization and model management.
+            
+            \subsubsection{Backend Layer}
+            The server-side application is developed using NodeJS and ExpressJS framework, providing a robust RESTful API. All API endpoints are designed to serve as a centralized hub, ensuring cross-platform data synchronization and seamless integration between the SPIDHIVE web application and SPIDTECH+ mobile application.
+            
+            \subsubsection{Storage Layer and Database Model}
+            While the core SPIDHIVE production infrastructure is hosted on an Amazon Web Services (AWS) Lightsail instance, the AI Model Zoo module was developed and evaluated within a localized staging environment. This approach was strategically chosen to isolate complex architectural modifications and prevent potential disruptions to live system operations. The development server was hosted locally, utilizing MySQL as the primary database management system to replicate the production schema. It employs the Sequelize Object-Relational Mapper (ORM) to enforce strict data integrity and manage complex relationships between developers, datasets, and AI models within this staging environment.
+            
+            Furthermore, to securely and efficiently bridge this localized web repository with the SPIDTECH+ mobile application, Supabase is integrated as a dedicated mobile backend. Supabase’s cloud storage buckets serve a dual purpose: they are utilized to host the compiled \texttt{.tflite} model artifacts for mobile deployment, and they store the raw image datasets that populate the SPIDTECH+ gallery, including the images uploaded from the field. To ensure the mobile app has immediate access to the latest repository updates during testing, essential AI model metadata is continuously synchronized from the local MySQL database to the Supabase database. This separation of concerns was established to create an architecture intended to prevent heavy mobile download traffic and high-volume image retrieval from bottlenecking the primary AWS web server upon final deployment.
+            
+            \subsection{Database Schema Implementation}
+            The schema is designed to provide a comprehensive, traceable structure for managing the lifecycle of AI models and their corresponding training datasets. The following core entities were implemented to support the operations of the AI Model Zoo module:
+            
+            \subsubsection{Dataset Registry (\texttt{cropdex\_datasets})}
+            This table functions as a historical ledger for every custom dataset generated by the system. It records the target crop, specific pest and disease labels requested, total image count, detailed metadata for the included images. This entity is linked to the requesting developer via the \texttt{creator\_id} foreign key. Table 1 provides a comprehensive description of these dataset attributes.
+            
+            \begin{table}[htbp]
+                \centering
+                \caption{Dataset Metadata}
+                \label{tab:dataset_metadata}
+                \begin{tabular}{p{0.3\columnwidth} p{0.6\columnwidth}}
+                    \toprule
+                    \textbf{Field}      & \textbf{Description} \\ 
+                    \midrule
+                    id                      & unique identifier of the dataset \\ 
+                    crop                    & target crop of the dataset \\ 
+                    labels                  & pests and diseases on the dataset \\ 
+                    num\_images             & number of images on the dataset \\ 
+                    image\_ids              & metadata of the images, which saves the id, split, label, annotations \\ 
+                    creator\_id             & foreign key of the downloader \\ 
+                    createdAt \& updatedAt  & dates created and updated \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+            
+            \subsubsection{AI Model Metadata (\texttt{cropdex\_ai\_models})}
+            This primary entity stores the technical attributes and evaluation metrics of each AI model uploaded to the repositroy. It includes core attributes such as the model name, neural network architecture, and deployment status. To enforce integrity and track developer, it is establishes a foreign key with the \texttt{cropdex\_users} via \texttt{developer\_id}. It also links to \texttt{cropdex\_datasets} via \texttt{dataset\_id} to explicitly map each model to the exact training data. For future expansion and iterative model development, it also includes \texttt{parent\_id} creating a traceable lineage of model versions. Table 2 details the complete attributes of this schema.
+            
+            \begin{table}[htbp]
+                \centering
+                \caption{AI Model Metadata}
+                \label{tab:ai_model_metadata}
+                \begin{tabular}{p{0.3\columnwidth} p{0.6\columnwidth}}
+                    \toprule
+                    \textbf{Field}          & \textbf{Description} \\ 
+                    \midrule
+                    id                      & unique identifier of the AI Model \\ 
+                    model\_name             & name of the AI Model \\ 
+                    model\_description      & description of the AI Model \\ 
+                    model\_type             & classification whether it performs object detection or image classification \\ 
+                    crop                    & target crop of the AI Model \\ 
+                    classes                 & target pests and diseases of the model\\
+                    architecture            & neural network architecture \\ 
+                    version number          & current version that increments when re-trained \\ 
+                    status                  & status whether an active or deleted model \\ 
+                    num\_downloads          & number of downloads of the AI Model \\ 
+                    tags                    & search tags  \\ 
+                    developer\_id           & foreign key of the developer \\ 
+                    dataset\_id             & foreign key of the dataset used \\ 
+                    weights\_file, tflite\_file, config\_file, metrics\_file, evaluation\_graphs 
+                                            & files uploaded when zip file; accepts null when single file \\ 
+                    metrics\_map50, metrics\_precision, metrics\_recall, metrics\_accuracy, metrics\_f1 & resulting metrics of the AI Model; map50 is only for detection, meanwhile accuracy is only for classification \\ 
+                    num\_images             & number of images on the dataset used \\ 
+                    parent\_model\_id       & foreign key of the AI Model; null when original training \\ 
+                    createdAt \& updatedAt  & dates created and updated \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+            
+            \subsubsection{SPIDTECH+ Registry (\texttt{available\_models})}
+            To decouple the mobile application's query load from the primary web database, a dedicated \texttt{available\_models} table is maintained within the Supabase architecture. This table stores essential, mobile-optimized metadata, including the model identifier, name, target crop, version number, deployment status, and the last update timestamp. It records the download URL that points to the compiled \texttt{.tflite} artifact hosted within the Supabase \texttt{ai-models} storage bucket. This structure enables seamless, over-the-air model updates for the SPIDTECH+ application. Table 3 shows a detailed description of this entity.
+            
+            \begin{table}[htbp]
+                \centering
+                \caption{AI Models Metadata in Supabase}
+                \label{tab:supabase_metadata}
+                \begin{tabular}{p{0.2\columnwidth} p{0.7\columnwidth}}
+                    \toprule
+                    \textbf{Field}      & \textbf{Description} \\ 
+                    \midrule
+                    model\_id           & unique identifier of the model \\ 
+                    name                & name of the model\\
+                    crop                & target crop of the dataset \\ 
+                    version             & version number of the model\\ 
+                    download\_url       & URL that points to the exact file in bucket storage \\  
+                    updated\_at         & date updated \\
+                    is\_active          & status of the model\\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+            
+            \subsection{User Interface Design}
+            The user interface for the AI Model Zoo is designed to maintain visual and functional consistency with the existing SPIDHIVE platform. To introduce specialized views for AI model management, the design architecture draws inspiration from industry-standard machine learning repositories, such as Roboflow. This ensures a minimal learning curve for existing users while providing professional-grade model management features.
+            
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{AI_dashboard.png}
+                \caption{AI Model Page}
+            \end{figure}
+            \subsubsection{AI Models Page}
+            The AI Models Page is a newly implemented module architected specifically to handle high-density data visualization and repository management.
+            
+            Figure 2 illustrates the primary dashboard, comprising an upload interface, a robust multi-attribute filter sidebar, and a grid of interactive AI model cards. The system enables efficient retrieval through saved recent searches and comprehensive querying by developer, neural network architecture, deployment status, and target crops. Each model card previews essential metadata and provides deep-link navigation directly to specific module tabs, such as Images or Analytics. To ensure a modern aesthetic and functional consistency with the broader SPIDHIVE platform, all interface components utilize the Shadcn UI Library and Tailwind CSS.
+            
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{AI_upload.png}
+                \caption{Upload New AI Model}
+            \end{figure}
+            Figure 3 illustrates the upload interface, which features a drag-and-drop zone that accepts both compressed \texttt{ZIP} archives and standalone \texttt{.tflite} files for SPIDTECH+ compatibility. The system automatically detects essential files within a \texttt{ZIP} archive, such as the required \texttt{.tflite} model, weights, configurations, evaluation graphs, and performance metric files. Furthermore, to facilitate seamless user onboarding, the interface integrates comprehensive instructional materials; developers can access video tutorials, web-based documentation, and downloadable PDF manuals via a dedicated help button strategically located at the top right of the module.
+            
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{AI_form.png}
+                \caption{Publish New AI Model}
+            \end{figure}
+            Figure 4 details the model publishing interface, designed to capture critical metadata and establish model lineage. To maximize system fault tolerance and accommodate varied developer workflows, the publishing interface was redesigned to feature segmented upload modules dedicated to basic details, performance metrics, and evaluation graphs. This modular architecture ensures that if an uploaded \texttt{ZIP} archive is incomplete or possesses an invalid directory structure, the automated parsing mechanism will not trigger a total system rejection; instead, it successfully extracts the available assets, such as the core \texttt{.tflite} artifact, while allowing developers to manually upload missing standalone files. 
+            
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{AI_edit.png}
+                \caption{Edit AI Model}
+            \end{figure}
+            Figure 5 illustrates the edit AI model interface, which auto-populates input fields with current metadata to preserve data continuity. Developers can modify key mutable attributes, including model name, architecture, target crop, dataset linkage, parent reference, and search tags, while utilizing advanced configuration tools like a visibility toggle to manage the public display of evaluation graphs. Furthermore, the interface retains the integrated rich-text editor, enabling developers to manually format technical updates or utilize the "auto-generate" function to instantly refresh foundational documentation following architectural changes.
+            
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\linewidth]{AI_delete.png}
+                \caption{Delete AI Model}
+            \end{figure}
+            Figure 6 shows the two-step confirmation process required to delete an AI model. To prevent accidental data loss, developers must enter their password to confirm the deletion. Additionally, to keep the system secure, only the original creator of a model has permission to edit or delete it.
+            
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{AI_overview.png}
+                \caption{AI Model Overview Tab}
+                \label{fig:placeholder}
+            \end{figure}
+            The AI model specification interface is organized into four functional tabs: Overview, Images, Versions, and Analytics. Figure 7 illustrates the Overview Tab, functioning as the primary dashboard to display critical metadata, including model name, contributing developer, performance metrics, target crop, neural network architecture, search tags, and technical documentation. To facilitate immediate deployment and streamline management, the page header centralizes retrieval and modification tools in a single view, granting users direct download access to the compiled \texttt{.tflite} artifact alongside the authorized developer's edit and delete functionalities.
+            
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{AI_image.png}
+                \caption{AI Model Images Tab}
+            \end{figure}
+            Figure 8 illustrates the dataset gallery used to train the selected AI model. To help developers easily inspect the quality of the data, the interface allows users to dynamically filter the images by their designated machine learning split (training, validation, or testing) and by specific pest or disease categories. Furthermore, an interactive toggle lets users overlay the precise bounding box annotations directly onto the images. This feature provides a clear, visual confirmation of exactly what the AI was trained to detect or classify.
+            
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\linewidth]{AI_version.png}
+                \caption{AI Model Version Tab}
+            \end{figure}
+            Figure 9 illustrates the Versions Tab, which visualizes the developmental lineage of connected AI models. This interface clearly displays both the preceding "ancestor" models it was based upon and any subsequent "descendant" models that were fine-tuned from it. For every related model in this branch, the section presents essential metadata, including the model name, contributing developer, creation date, verified performance metrics, and current deployment status. To streamline the developer's workflow, each listed version includes quick-access action buttons. These allow users to instantly navigate to a related model's full specification page or directly download its \texttt{.tflite} file for mobile deployment.
+            
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{AI_analytics.png}
+                \caption{AI Model Analytics Tab}
+            \end{figure}
+            Figure 10 illustrates the Analytics Tab, which provides a detailed visual dashboard of the AI model's performance metrics and evaluation graphs. To ensure thorough technical transparency, these analytical insights are automatically extracted and displayed exclusively for models uploaded via a complete \texttt{ZIP} archive. From this interface, users can also download the original source \texttt{ZIP} file. This feature provides researchers with direct access to all essential training artifacts, including the neural network weights, architectural configuration files, and raw data logs—enabling offline analysis and strict scientific reproducibility.
+            
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\linewidth]{statistics.png}
+                \caption{Statistics Page}
+            \end{figure}
+            \subsubsection{Statistics}
+            Figure 11 illustrates the Statistics dashboard, a centralized interface for real-time system monitoring across five specialized tabs: Crops, Annotations, Images, AI Models, and Users. By integrating the \texttt{Recharts} library, the module intuitively visualizes complex data using Key Performance Indicator (KPI) cards, dynamic charts, and ranking tables to highlight top platform contributors. Additionally, a built-in export function enables administrators to download comprehensive, multi-sheet Excel reports detailing overall repository health and usage trends.
+            
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{download_dataset.png}
+                \caption{Download Dataset}
+            \end{figure}
+            \subsubsection{Download Dataset}
+            Figure 12 illustrates the dataset download functionality, which compiles a structured \texttt{ZIP} archive by automatically separating raw images from their corresponding annotations. To mitigate model overfitting, the backend algorithmically partitions the data into randomized training, validation, and testing subsets based on user-defined distribution ratios. Crucially, the system auto-generates a \texttt{.yaml} configuration file using fixed numerical class indices; this strict mapping ensures the neural network consistently aligns the correct value with its specific agricultural label, actively preventing class confusion during iterative retraining.
+            
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{my_account.png}
+                \caption{My Account Page}
+            \end{figure}
+            \subsubsection{My Account}
+            Figure 13 illustrates the redesigned user profile, updated to ensure strict visual consistency with the AI Model Zoo. To enforce system security and workflow boundaries, the interface dynamically renders tools based on user authorization: "Contributors" are restricted to the My Images and My Annotations tabs for raw data handling, whereas "AI Developers" access My Images and a specialized AI Models tab. To protect expert-verified data, the labeling interface is completely hidden from developers; instead, their profile focuses on comprehensive model management, featuring a secure recovery function for restoring archived artifacts.
+            
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{SPIDTECH_live.png}
+                \caption{SPIDTECH+ Gallery}
+            \end{figure}
+            \subsubsection{SPIDTECH+ Gallery}
+            Figure 14 illustrates the SPIDTECH+ gallery interface, which mirrors images uploaded and reported via the mobile application directly into SPIDHIVE to facilitate continuous dataset enhancement and AI model retraining. These images are fetched from a Supabase storage bucket and displayed alongside comprehensive metadata, including the creation date, feedback type (upload or report), the specific AI model used, user evaluations, and exact image attributes such as size, file path, target crop, and photo validity. To maintain strict data integrity before these images are used for future model training, only authorized expert contributors are granted the permission to modify the crop classifications, labels, and bounding box annotations associated with these mobile submissions.
+            
+            Across the platform, various UI/UX elements underwent systematic refinement to establish a modern aesthetic and ensure functional consistency. However, the core architectural layouts and navigational hierarchies were deliberately preserved. This strategic design decision was made to minimize cognitive load, ensuring that existing users can seamlessly adopt the new AI model management features without facing a disruptive learning curve.
+            
+            \subsection{Cross-Platform Integration and API Architecture}
+            The management and publication of new AI models necessitate a robust API to handle complex data operations, including fetching metadata, downloading artifacts, and uploading new models. Table 4 details the specific RESTful API endpoints engineered to manage the AI Model Zoo's lifecycle.
+            
+            \begin{table}[htbp]
+                \centering
+                \caption{API Endpoints in AI Model Zoo}
+                \label{tab:api_endpoints}
+                \begin{tabular}{p{0.25\columnwidth}p{0.6\columnwidth}}
+                    \toprule
+                    \textbf{Field}      & \textbf{Description} \\ 
+                    \midrule
+                    GET /                       & Fetch all AI Models\\ 
+                    GET /:id                    & Fetch the details of a specific AI Model\\ 
+                    GET /:id/versions           & Traverses the branching lineage of the AI Model, fetching both the descendants and ancestors\\ 
+                    GET /download/:id           & Downloads the \texttt{.tflite} file of an AI Model\\ 
+                    GET /download-source/:id    & Downloads ZIP file of the entire training folder\\ 
+                    DELETE /:id                 & Performs soft delete on the model\\ 
+                    PUT /:id                    & Edits the details of a model including its name, description, architecture, search tags, parent, and linked dataset\\
+                    POST /analyze-upload        & Extracts and scans the uploaded model folder or single file\\
+                    POST /publish               & Finalizes the uploaded folder/file and uploads it onto the storage\\
+                    POST /:id/restore           & Restores the deleted model\\
+                    \bottomrule
+             &\\
+                \end{tabular}
+            \end{table}
+            
+            Rather than functioning solely as a traditional web backend, the system's API is architected to serve as a bidirectional distribution hub linking the SPIDHIVE web repository with the SPIDTECH+ mobile application. This cross-platform integration ensures that AI models developed and evaluated on the web are immediately accessible for mobile deployment, while conversely, the images uploaded and reported by users on the mobile app are instantly mirrored back to the web platform for expert annotation and dataset enhancement.
+            
+            To achieve this seamless synchronization, Supabase is integrated as the dedicated mobile backend service. For model deployment, this architecture allows the SPIDTECH+ application to securely query the Supabase registry for the latest available models without requiring manual software updates to the application itself. The distribution endpoints are specifically optimized to package and deliver mobile-ready training artifacts, notably the compiled \texttt{.tflite} model files. Simultaneously, Supabase storage buckets are utilized to capture the gallery, specifically the raw images and metadata submitted from the field, allowing the SPIDHIVE backend to efficiently fetch and display them for review. By offloading both the delivery of heavy model artifacts and the ingestion of mobile image uploads to Supabase, the architecture is engineered to minimize payload delivery times, prevent bottlenecking on the primary web server, and facilitate highly efficient over-the-air synchronization between the repository and end-user devices.
+            
+            \subsection{Usability Review}
+            To evaluate the platform's functional efficiency, a purposive sample of five ($n=5$) expert AI Developers was utilized, aligning with Nielsen's model asserting that five representative users can uncover approximately 85\% of core usability friction points \cite{Nielsen_2024}. Participants executed standard repository workflows—such as uploading training artifacts and interpreting performance analytics—using the Concurrent Think-Aloud (CTA) protocol to continuously verbalize their real-time cognitive processes and navigational expectations \cite{Moran_2026}. Following these practical tasks, participants completed a System Usability Scale (SUS) adapted from Neil Turner’s framework \cite{Sauro} to systematically quantify subjective user satisfaction and interface clarity. Together, the qualitative CTA insights and structured SUS feedback provided a comprehensive assessment of the AI Model Zoo's operational readiness.
+
+        \section{RESULTS}
+            \subsection{System Implementation and Bidirectional Synchronization}
+            The development of the AI Model Zoo successfully translated complex backend logic into a highly functional web interface. During system evaluation, the automated extraction routines reliably parsed uploaded \texttt{.zip} training artifacts to auto-populate neural network metadata, significantly reducing developer cognitive load. Furthermore, the system successfully executed automated dataset processing, accurately partitioning images and generating the required \texttt{.yaml} configurations to prevent class-confusion during iterative retraining.
+            
+            \begin{figure}[htbp]
+                \centering
+                \includegraphics[width=0.75\linewidth]{diagram.png}
+                \caption{Bidirectional Synchronization}
+            \end{figure}
+            
+            Crucially, Figure 15 illustrates the reliable bidirectional, cross-platform synchronization by integrating Supabase as a dedicated intermediary backend. For downstream deployment, the web platform successfully packaged and delivered compiled \texttt{.tflite} AI models to the SPIDTECH+ application for offline edge inference. Conversely, for upstream data collection, telemetry images captured via the mobile app were accurately mirrored onto the SPIDHIVE web dashboard, allowing authorized experts to review and edit field data without bottlenecking the primary AWS server. Ultimately, this architecture successfully establishes a continuous, real-world pipeline between remote field data collection and centralized AI model refinement.
+            
+            \subsection{System Usability Scale (SUS)}
+            Following the practical testing sessions, participants completed a standard 10-item SUS questionnaire to measure perceived usability, rating each question on a scale from 1 (Strongly Disagree) to 5 (Strongly Agree).
+            \begin{enumerate}
+                \item I think that I would like to use this system frequently.
+                \item I found the system unnecessarily complex.
+                \item I thought the system was easy to use.
+                \item I think that I would need the support of a technical person to be able to use this system.
+                \item I found the various functions in this system were well integrated.
+                \item I thought there was too much inconsistency in this system.
+                \item I would imagine that most people would learn to use this system very quickly.
+                \item I found the system very cumbersome to use.
+                \item I felt very confident using the system.
+                \item I needed to learn a lot of things before I could get going with this system.
+            \end{enumerate}
+            
+            The responses were calculated using the standard SUS scoring framework, yielding a final average system score of 88.0 out of 100. Table 5 illustrates the individual scores, which were consistently high (ranging from 85.0 to 92.5), demonstrating uniform agreement among the testers.
+            
+            \begin{table}[htbp]
+                \centering
+                \caption{SUS Evaluation on ($n=5$)}
+                \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}} cccccccccccl }
+                \toprule
+                \textbf{\#} & \multicolumn{10}{c}{\textbf{Raw Score}} & \textbf{Final} \\ 
+                \midrule
+                1 & 5 & 2 & 4 & 2 & 4 & 1 & 5 & 1 & 5 & 2 & 87.5 \\ 
+                2 & 5 & 1 & 4 & 2 & 5 & 1 & 5 & 1 & 5 & 2 & 92.5 \\ 
+                3 & 4 & 2 & 5 & 1 & 5 & 1 & 5 & 1 & 4 & 2 & 90.0 \\ 
+                4 & 5 & 1 & 5 & 1 & 5 & 1 & 4 & 1 & 3 & 4 & 85.0 \\ 
+                5 & 5 & 1 & 5 & 4 & 5 & 1 & 5 & 1 & 5 & 4 & 85.0 \\ 
+                \midrule
+                \multicolumn{11}{c}{\textbf{Final Average}} & \textbf{88.0} \\ 
+                \bottomrule
+                \end{tabular*}
+            \end{table}
+            
+            According to established SUS benchmarking standards, a score above 68 is considered above average, and a score above 80.3 represents the top 10\% of user interfaces \cite{Sauro}. The system’s score of 88.0 places the AI Model Zoo firmly in the "Excellent" category, indicating a very high level of user satisfaction and a minimal learning curve. Notably, testers scored the platform exceptionally high on integration and learnability, validating the design decision to align the new module's architecture strictly with the existing SPIDHIVE user interface.
+            
+            \subsection{System Strengths and Refinements}
+            While the SUS score provides a standardized usability benchmark, the open-ended feedback and Concurrent Think-Aloud sessions yielded critical insights into the developers' real-time interactions with the system. The qualitative feedback was thematically analyzed and categorized into core operational strengths and minor areas for iterative refinement.
+            
+            \subsubsection{\textbf{Core Operational Workflows}}
+            \begin{itemize}
+                \item \textbf{Workflow Automation:}
+                Participants consistently praised the automated extraction routines during the model upload process. Testers noted that the auto-parsing of \texttt{.zip} artifacts and the integrated documentation generation significantly reduced manual data entry and cognitive load.
+                \item \textbf{Information Architecture and User Interface:}
+                The structural layout and visual design received highly positive feedback. Developers found the interface highly intuitive, noting that the modular, tabbed design effectively segregates complex contextual data, making it easy to comprehend even for non-technical users. Furthermore, testers appreciated the responsive UI micro-interactions, such as hover states and smooth animations, which contributed to a modern, professional user experience.
+                \item \textbf{System Security and Data Privacy:}
+                A critical validation of the backend architecture came from technical observations regarding API data fetching. Expert testers specifically noted and appreciated the optimized payload design, confirming that the backend successfully sanitizes fetched data to prevent the exposure of non-public variables and sensitive system information.
+                \item \textbf{Retrieval and Navigation}
+                Testers confirmed that the repository's search and filtering mechanisms were highly functional, allowing them to easily query and isolate specific AI models from the database without experiencing lag or system errors.
+            \end{itemize}
+            
+            \subsubsection{\textbf{Identified Friction Points and Minor System Refinements}}
+            Because the core functionalities were already highly stable, the actionable recommendations provided by the developers focused strictly on minor, iterative optimizations to further enhance data density and edge-case navigation:
+            \begin{itemize}
+                \item \textbf{UI Density and Context:}
+                To optimize visual scanning, testers recommended slightly reorganizing the AI model preview cards to reduce visual cramping. Additionally, while the upload parsing was praised, developers suggested adding brief explanatory helper text below specific inputs (such as dataset linking) to guide first-time users.
+                \item \textbf{Search Filtering Logic:}
+                While the filtering system was deemed highly effective, testers recommended a minor logic adjustment, shifting the underlying query from a strict boolean \texttt{AND} parameter to a broader scope, to prevent overly limited search results during complex queries.
+                \item \textbf{Granular Inspection:}
+                For advanced model evaluation, testers requested the addition of an image zoom function during the upload phase, and recommended that smaller analytical charts be made interactive (clickable or expandable) to ensure strict legibility.
+            \end{itemize}
+
+        \section{CONCLUSION AND FUTURE WORK}
+            \subsection{Conclusion}
+            This study successfully developed the AI Model Zoo module for SPIDHIVE, establishing a centralized lifecycle management platform and a lightweight deployment pipeline for agricultural AI artifacts. By centralizing TensorFlow Lite models, evaluation metadata, and deployment resources, the system resolves conventional dissemination limitations and enables interoperable, cloud-based synchronization with the SPIDTECH+ mobile client. This architecture significantly improves deployment consistency and equips the mobile client with offline, edge-based inference capabilities suitable for low-connectivity agricultural environments. Ultimately, the developed platform bridges the gap between AI model development and practical field deployment, demonstrating the feasibility of integrating robust repository management with mobile synchronization workflows.
+            
+            \subsection{Limitations}
+            Furthermore, due to the module's significant architectural complexity, it is currently retained in a secure, pre-production staging environment rather than the live public server. Finally, a practical constraint of utilizing managed cloud services, such as Supabase for mobile synchronization and AWS for web hosting, is the recurring financial cost associated with scaling data storage and bandwidth to accommodate nationwide agricultural utilization.
+            
+            \subsection{Recommendations}
+            The primary recommendation for future work is the phased integration and official deployment of this module into the live SPIDHIVE production server. This transition will require careful database schema migration, comprehensive load testing, and a rigorous cost-benefit analysis of the cloud infrastructure to ensure that the managed services, such as Supabase, can reliably and affordably handle public traffic without disrupting existing operations.
+		
+        \makereferences{references}
+			
+	\end{mainmatter}
+\end{document}
