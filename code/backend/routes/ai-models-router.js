@@ -31,6 +31,19 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+const findFileByName = (directory, fileName) => {
+  const entries = fs.readdirSync(directory, { withFileTypes: true });
+  for (const entry of entries) {
+    const entryPath = path.join(directory, entry.name);
+    if (entry.isFile() && entry.name === fileName) return entryPath;
+    if (entry.isDirectory()) {
+      const match = findFileByName(entryPath, fileName);
+      if (match) return match;
+    }
+  }
+  return null;
+};
+
 const graphStorage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, upload_directory),
     filename: (req, file, cb) => cb(null, 'manual_graph_' + Date.now() + path.extname(file.originalname))
@@ -376,9 +389,10 @@ router.get("/check-name", authenticateToken, async (req, res) => {
 
 // POST /ai-models/publish - Finalize and rename folder
 router.post("/publish", authenticateToken, async (req, res) => {
+  let transaction;
   try {
     const { formData, detectedData } = req.body;
-    const transaction = await sequelize.transaction();
+    transaction = await sequelize.transaction();
 
     let calculatedVersion = 1;
     let parsedParentId = null;
@@ -404,7 +418,15 @@ router.post("/publish", authenticateToken, async (req, res) => {
 
     const finalWeights = detectedData.weights.length > 0 ? `${finalDirName}/${detectedData.weights[0]}` : null;
     const finalConfig = detectedData.configs.length > 0 ? `${finalDirName}/${detectedData.configs[0]}` : null;
-    const finalTflite = detectedData.tflite ? `${finalDirName}/${detectedData.tflite}` : null;
+    const tflitePath = detectedData.tflite
+      ? findFileByName(finalDirPath, path.basename(detectedData.tflite))
+      : null;
+    if (detectedData.tflite && !tflitePath) {
+      throw new Error(`Uploaded TFLite file was not found after extraction: ${detectedData.tflite}`);
+    }
+    const finalTflite = tflitePath
+      ? path.relative(upload_directory, tflitePath).split(path.sep).join('/')
+      : null;
     const finalMetricsFile = detectedData.metricsFile ? `${finalDirName}/${detectedData.metricsFile}` : null;
     const finalGraphs = detectedData.graphs.map(graphName => `${finalDirName}/${graphName}`);
 
@@ -431,9 +453,8 @@ router.post("/publish", authenticateToken, async (req, res) => {
       metrics_val_loss: formData.metrics_val_loss ? parseFloat(formData.metrics_val_loss) : null,
     }, { transaction });
 
-    if (detectedData.tflite) {
-      const localFilePath = path.join(finalDirPath, detectedData.tflite);
-      const fileBuffer = fs.readFileSync(localFilePath);
+    if (tflitePath) {
+      const fileBuffer = fs.readFileSync(tflitePath);
 
       const { data: storageData, error: storageError } = await supabase.storage
         .from('ai-models')
@@ -464,7 +485,9 @@ router.post("/publish", authenticateToken, async (req, res) => {
     await transaction.commit();
     res.status(201).json({ message: "Model published successfully!", model: newModel });
   } catch (error) {
-    if (transaction) await transaction.rollback();
+    if (transaction && !transaction.finished) {
+      await transaction.rollback();
+    }
     console.error("Publish/Mirroring Error. MySQL Rolled Back.", error);
     if (error.statusCode === '403') {
       return res.status(500).json({ error: "Cloud storage auth failed. Check Supabase Keys." });

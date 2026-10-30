@@ -43,8 +43,7 @@ router.get("/all-annotation-data", async (req, res) => {
                     model: db.cropdex_image_data,
                     where: image_data_where
                 }
-            ],
-            group: ['pest_disease_label', 'image_data_id']
+            ]
         };
 
         if (Array.isArray(label_filters)) {
