@@ -2,7 +2,6 @@
 -- This file includes the June 2024 data dump and all recovered schema updates.
 -- Import this file into MySQL as a single script.
 
-/*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19  Distrib 10.5.28-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: spidhive
@@ -24,7 +23,9 @@
 -- Current Database: `spidhive`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `spidhive` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+CREATE DATABASE IF NOT EXISTS `spidhive`
+  DEFAULT CHARACTER SET utf8mb4
+  COLLATE utf8mb4_general_ci;
 
 USE `spidhive`;
 
