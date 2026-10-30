@@ -26,17 +26,68 @@ that PowerShell is open in this directory.
 
 ## 2. Install and start MySQL
 
-Install MySQL Server and remember the username and password for a local
-administrative account. Make sure the MySQL service is running before importing
-the database.
+MySQL is the program that stores the application's accounts, crop information,
+annotations, and AI model information. You do not need to understand databases
+to install it; follow the steps below.
+
+### Download MySQL
+
+Use the official MySQL download pages:
+
+- [MySQL Installer for Windows](https://dev.mysql.com/downloads/installer/)
+- [MySQL Workbench for Windows](https://dev.mysql.com/downloads/workbench/)
+
+The **MySQL Installer for Windows** is the easiest option because it can install
+both MySQL Server and MySQL Workbench. Workbench is a graphical application that
+lets you open and manage the database without typing every command.
+
+### Install MySQL Server and Workbench
+
+1. Open the [MySQL Installer for Windows](https://dev.mysql.com/downloads/installer/)
+   page.
+2. Download **mysql-installer-community**. Choose the larger file if you are
+   unsure; it includes the files needed for installation.
+3. Open the downloaded installer. Allow it to make changes if Windows asks.
+4. When asked for a setup type, choose **Developer Default**. This installs
+   MySQL Server and useful tools, including Workbench.
+5. Continue through the installer. If it asks to install supporting software,
+   allow it to do so.
+6. When the installer asks for a MySQL root password, create one and write it
+   down somewhere safe. The username is usually `root`.
+7. Leave the port as `3306` unless you already use that port for another
+   program.
+8. Complete the installation and make sure MySQL Server is configured to start
+   as a Windows service.
+
+The `root` account is the local administrator account used by this setup. The
+password is the one you created during installation; it is not the password for
+GitHub, Supabase, or Windows.
+
+### Confirm that MySQL is running
+
+Open **MySQL Workbench** from the Windows Start menu. On the first screen,
+double-click the local connection, usually named **Local instance MySQL80**.
+Enter the root password you created above. If Workbench opens a page with a
+list of database tools on the left, MySQL is working.
+
+If the connection cannot be opened, restart the computer and try again. You can
+also open the Windows **Services** application, find a service named
+**MySQL80**, and choose **Start**.
 
 ### Import the SQL database dump
 
 The repository includes
 [`spidhive_schema_update_2026.sql`](./spidhive_schema_update_2026.sql). This is
-a complete MariaDB/MySQL dump through 2026. It creates the `spidhive` database,
-creates the tables, imports the data, and applies the recorded schema updates.
-It is not an empty schema migration.
+a complete MariaDB/MySQL dump through 2026. In simple terms, it is a saved copy
+of the project's database. It creates the `spidhive` database, creates the
+tables, imports the data, and applies the recorded schema updates. It is not an
+empty schema migration.
+
+Before importing, make sure:
+
+- MySQL Server is running.
+- You are in the repository's `code` folder.
+- You know the root password created during MySQL installation.
 
 From PowerShell, invoke `cmd.exe` to import it with the MySQL client:
 
@@ -44,28 +95,40 @@ From PowerShell, invoke `cmd.exe` to import it with the MySQL client:
 cmd /c "mysql -u root -p < spidhive_schema_update_2026.sql"
 ```
 
-Enter the MySQL password when prompted. If `mysql` is not recognized, run the
-client using its full installation path, for example:
+When the command asks for a password, type the MySQL root password and press
+Enter. Nothing will appear on the screen while you type; this is normal.
+
+If Windows says that `mysql` is not recognized, use the full installation path
+instead:
 
 ```powershell
 cmd /c """C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe"" -u root -p < spidhive_schema_update_2026.sql"
 ```
 
-Alternatively, in MySQL Workbench:
+### Import using MySQL Workbench instead
+
+If you prefer buttons instead of commands, use MySQL Workbench:
 
 1. Open a connection to the local MySQL server.
-2. Select **File > Open SQL Script** and open
-   `code\spidhive_schema_update_2026.sql`.
-3. Execute the complete script.
-4. Refresh the schemas and confirm that `spidhive` exists.
+2. Select **File > Open SQL Script**.
+3. Open `code\spidhive_schema_update_2026.sql`.
+4. Press the lightning-bolt **Execute** button.
+5. Wait for the script to finish. The file is large, so this may take a few
+   minutes.
+6. In the **Schemas** panel on the left, click the refresh button and confirm
+   that a database named `spidhive` appears.
 
-Verify the import from the MySQL client:
+To check that the import worked, open a new Workbench query tab and run:
 
 ```sql
 USE spidhive;
 SHOW TABLES;
 SELECT COUNT(*) FROM cropdex_users;
 ```
+
+Press the lightning-bolt **Execute** button. You should see a list of tables and
+a count returned for `cropdex_users`. If you see an error, check that you
+selected the correct MySQL connection and that the import finished.
 
 Do not run `npx sequelize-cli db:migrate` after importing this dump unless you
 have confirmed that a migration has not already been included. The dump already
