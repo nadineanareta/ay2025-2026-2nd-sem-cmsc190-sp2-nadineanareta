@@ -5,5 +5,7 @@ The effective monitoring of crop pests and diseases is critical for agricultural
 
 Keywords: SPIDTECH+, SPIDHIVE, AI Model Repository, Cross-Platform Synchronization, Pest and Disease Identification
 
-Read [SETUP.md](SETUP.md) for development setup instructions and [CHANGELOG.md](CHANGELOG.md) for the history of enrollment.
+Read [SETUP.md](/code/SETUP.md) for development setup instructions and [CHANGELOG.md](CHANGELOG.md) for the history of enrollment.
+
+
 CHECKED: VRMMADRID

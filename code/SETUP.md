@@ -194,9 +194,12 @@ Use an authorized sample ZIP archive containing the model files expected by the
 upload page, such as `.pt`, `.tflite`, `.yaml`, metrics, and graph files. In
 the web interface:
 
-1. Sign in with a development account.
-2. Open the AI model upload page.
-3. Select the ZIP archive and upload it.
-4. Confirm that the model metadata is saved in MySQL.
-5. Confirm that the `.tflite` file is stored in the Supabase `ai-models`
+1. Sign in with the authorized super-admin account:
+   `rlbelleza@up.edu.ph`.
+2. Obtain the password privately from the project administrator. Do not add the
+   password to this file, Git, screenshots, or public messages.
+3. Open the AI model upload page.
+4. Select the ZIP archive and upload it.
+5. Confirm that the model metadata is saved in MySQL.
+6. Confirm that the `.tflite` file is stored in the Supabase `ai-models`
    bucket when the upload includes one.
