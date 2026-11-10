@@ -107,8 +107,9 @@ cmd /c """C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe"" -u root -p < s
 
 ### Import using MySQL Workbench instead
 
-If you prefer buttons instead of commands, use MySQL Workbench:
+If you prefer using MySQL Workbench, you can use either of the following methods:
 
+#### Method 1: Open SQL Script
 1. Open a connection to the local MySQL server.
 2. Select **File > Open SQL Script**.
 3. Open `code\spidhive_schema_update_2026.sql`.
@@ -117,6 +118,14 @@ If you prefer buttons instead of commands, use MySQL Workbench:
    minutes.
 6. In the **Schemas** panel on the left, click the refresh button and confirm
    that a database named `spidhive` appears.
+
+#### Method 2: Data Import Tool
+1. Open a connection to the local MySQL server.
+2. In the top navigation bar, go to **Server > Data Import**.
+3. Under **Import Options**, select **Import from Self-Contained File**.
+4. Click the file selector button `...` and browse to select `code\spidhive_schema_update_2026.sql`.
+5. Click **Start Import** in the bottom-right corner.
+6. Wait for the import process to complete, then click the refresh button in the **Schemas** panel on the left to confirm that the `spidhive` database appears.
 
 To check that the import worked, open a new Workbench query tab and run:
 
